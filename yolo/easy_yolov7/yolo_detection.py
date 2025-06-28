@@ -25,7 +25,7 @@ class YOLOv7Detection(Node):
 
         self.subscription = self.create_subscription(
             Image,
-            '/camera/image_raw',
+            '/camera_sensor_0/image_raw',
             self.listener_callback,
             10)
         self.subscription
