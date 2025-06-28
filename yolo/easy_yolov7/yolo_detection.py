@@ -32,7 +32,7 @@ class YOLOv7Detection(Node):
 
         self.publisher_ = self.create_publisher(Point, 'xy_coordiantes', 10)
 
-        self.cam_publisher_ = self.create_publisher(Image, '/camera/image_detect', 10)
+        self.cam_publisher_ = self.create_publisher(Image, '/camera_sensor_0/image_detect', 10)
 
 
         self.bridge = CvBridge()
