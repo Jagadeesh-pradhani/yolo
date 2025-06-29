@@ -16,7 +16,7 @@ class YOLOv7MultiDrone(Node):
         super().__init__('yolov7_multi_drone')
 
         # Declare / read number of drones
-        self.declare_parameter('num_drones', 1)
+        self.declare_parameter('num_drones', 10)
         self.num_drones = self.get_parameter('num_drones').value
 
         # YOLOv7 setup
@@ -87,7 +87,7 @@ class YOLOv7MultiDrone(Node):
                 x, y, w, h = det['x'], det['y'], det['width'], det['height']
                 cx, cy = x + w/2, y + h/2
                 cv2.circle(drawn, (int(cx), int(cy)), 5, (0,0,255), -1)
-                self._publish_point(idx, cx, cy)
+                # self._publish_point(idx, cx, cy)
 
             # publish individual image (optional)
             self._publish_image(idx, drawn)
