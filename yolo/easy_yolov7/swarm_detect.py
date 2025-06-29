@@ -16,7 +16,7 @@ class YOLOv7MultiDrone(Node):
         super().__init__('yolov7_multi_drone')
 
         # Declare / read number of drones
-        self.declare_parameter('num_drones', 10)
+        self.declare_parameter('num_drones', 1)
         self.num_drones = self.get_parameter('num_drones').value
 
         # YOLOv7 setup
@@ -47,7 +47,7 @@ class YOLOv7MultiDrone(Node):
 
             # centroid publisher
             self.coord_pubs.append(
-                self.create_publisher(Point, f'/drone_{i}/xy_coordiantes', 10)
+                self.create_publisher(Point, f'/drone_{i}/xy_coordinates', 10)
             )
 
             # (optional) individual image publisher
@@ -75,7 +75,14 @@ class YOLOv7MultiDrone(Node):
 
             # compute centroids & publish
             for det in detections:
-                if det['class'] == 'person':
+                if det['class'] == 'bullseye':  # When bullseye is detected
+                    x, y, w, h = det['x'], det['y'], det['width'], det['height']
+                    cx, cy = x + w/2, y + h/2
+                    cv2.circle(drawn, (int(cx), int(cy)), 5, (0,255,0), -1)
+                    cv2.putText(drawn, "BULLSEYE", (int(x), int(y-10)), 
+                              cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                    self._publish_point(idx, cx, cy)
+                    self.get_logger().info(f"Drone {idx} detected bullseye at pixel coordinates: ({cx}, {cy})")
                     continue
                 x, y, w, h = det['x'], det['y'], det['width'], det['height']
                 cx, cy = x + w/2, y + h/2
@@ -92,6 +99,7 @@ class YOLOv7MultiDrone(Node):
         return callback
 
     def _publish_point(self, idx, x, y):
+        self.get_logger().info(f'[{idx}] Publishing point: ({x}, {y})')
         msg = Point(x=x, y=y, z=0.0)
         self.coord_pubs[idx].publish(msg)
 
