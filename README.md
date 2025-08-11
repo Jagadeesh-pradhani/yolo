@@ -40,9 +40,14 @@ python -m pip install --upgrade pip setuptools wheel numpy
 pip install Cython==0.29.32
 
 # Lap folder direct paste
-https://github.com/Adnedvid/Lap-pkg-for-YOLO
-
+# https://github.com/Adnedvid/Lap-pkg-for-YOLO
+cd ~/
+git clone https://github.com/Adnedvid/Lap-pkg-for-YOLO lap_pkg
+cd ~/lap_pkg
+mv Lap\ 0.4.0\ full\ package/ LAP_FULL
+cd LAP_FULL
 # Paste in yolo_venv/lib/python3.10/site-packages/
+cp -r lap* ~/yolo_venv/lib/python3.10/site-packages/
 
 
 # Install cython-bbox separately
